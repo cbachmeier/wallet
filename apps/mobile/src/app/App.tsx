@@ -1,5 +1,6 @@
 import { ApolloProvider } from '@apollo/client'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { PrivyProvider } from '@privy-io/expo'
 import * as Sentry from '@sentry/react-native'
 import { PerformanceProfiler, RenderPassReport } from '@shopify/react-native-performance'
 import { default as React, StrictMode, useCallback, useEffect } from 'react'
@@ -158,12 +159,14 @@ function AppOuter(): JSX.Element | null {
                   <LockScreenContextProvider>
                     <Sentry.TouchEventBoundary>
                       <DataUpdaters />
-                      <BottomSheetModalProvider>
-                        <AppModals />
-                        <PerformanceProfiler onReportPrepared={onReportPrepared}>
-                          <AppInner />
-                        </PerformanceProfiler>
-                      </BottomSheetModalProvider>
+                      <PrivyProvider appId={process.env.PRIVY_APP_ID ?? ''}>
+                        <BottomSheetModalProvider>
+                          <AppModals />
+                          <PerformanceProfiler onReportPrepared={onReportPrepared}>
+                            <AppInner />
+                          </PerformanceProfiler>
+                        </BottomSheetModalProvider>
+                      </PrivyProvider>
                     </Sentry.TouchEventBoundary>
                   </LockScreenContextProvider>
                 </BiometricContextProvider>
